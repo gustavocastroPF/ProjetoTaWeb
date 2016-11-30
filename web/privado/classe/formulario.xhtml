@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    <b:well>
+        <b:row>
+            <h:form id="formEdicao">
+                <h:panelGroup rendered="#{controleClasse.editando}">
+                    <p:messages/>
+                    <b:container>
+                        <h2>Edição de Classes</h2>     
+                    </b:container>
+
+                    <b:inputText id="txtID" value="#{controleClasse.obj.id}" readonly="true" col-lg="12" colLg="12">
+                        <f:facet name="prepend">
+                            <h:outputText value="ID"/>
+                        </f:facet>
+                    </b:inputText>
+                    <br/>
+
+
+                    <b:inputText id="txtDescricao" value="#{controleClasse.obj.descricao}" col-lg="12" colLg="12">
+                        <f:facet name="prepend">
+                            <h:outputText value="Descrição"/>
+                        </f:facet>
+                    </b:inputText>
+                    <br/>
+
+                    <b:inputText id="txtBonus" value="#{controleClasse.obj.bonus}" col-lg="12" colLg="12">
+                        <f:facet name="prepend">
+                            <h:outputText value="Bônus"/>
+                        </f:facet>
+                    </b:inputText>
+                    <br/>
+                    <b:container>
+                        <b:commandButton value="Salvar"  class="btn-primary" icon-align="left" tooltip-position="left" icon-size="2x" icon="glyphicon-floppy-disk"  look="info" action="#{controleClasse.salvar()}" update="formEdicao :formListagem"/>
+                    </b:container>
+                </h:panelGroup>
+            </h:form>
+        </b:row>
+    </b:well>
+</html>
+

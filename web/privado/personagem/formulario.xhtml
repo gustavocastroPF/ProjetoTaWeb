@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    <b:well>
+        <b:row>
+            <h:form id="formEdicao">
+                <h:panelGroup rendered="#{controlePersonagem.editando}">
+                    <p:messages/>
+                    <b:container>
+                        <h2>Edição de Personagems</h2>     
+                    </b:container>
+
+                    <b:inputText id="txtID" value="#{controlePersonagem.obj.id}" readonly="true" col-lg="12" colLg="12">
+                        <f:facet name="prepend">
+                            <h:outputText value="ID"/>
+                        </f:facet>
+                    </b:inputText>
+                    <br/>
+
+
+                    <b:inputText id="txtNome" value="#{controlePersonagem.obj.nome}" col-lg="12" colLg="12" >
+                        <f:facet name="prepend">
+                            <h:outputText value="Nome"/>
+                        </f:facet>
+                    </b:inputText>
+                    <br/>
+                    
+                    <p:calendar id="txtCriacao" value="#{controlePersonagem.obj.criacao}" style="width: 97.3%;">
+                        <f:facet name="prepend">
+                            <h:outputText value="Dt. Criação"/>
+                        </f:facet>
+                        <f:converter converterId="converterCalendar"/>
+                    </p:calendar>
+                    
+                    
+                    <b:container style="padding-left: 20px;padding-right: 50px;">
+                        
+                        <b:selectOneMenu value="#{controlePersonagem.obj.classe}"
+                                         id="selectClasse" >
+                            <f:selectItem itemLabel="Selecione uma classe"
+                                          noSelectionOption="true" />
+                            <f:selectItems value="#{controlePersonagem.daoClasse.listaObjetos}"
+                                           var="c" itemLabel="#{c.descricao}"/>
+                            <f:converter converterId="converterClasse"/>
+                        </b:selectOneMenu>
+
+                        <b:selectOneMenu value="#{controlePersonagem.obj.outfit}"
+                                         id="selectOutfit">
+                            <f:selectItem itemLabel="Selecione um outfit"
+                                          noSelectionOption="true"/>
+                            <f:selectItems value="#{controlePersonagem.daoOutfit.listaObjetos}"
+                                           var="o" itemLabel="#{o.armadura}"/>
+                            <f:converter converterId="converterOutfit"/>
+                        </b:selectOneMenu>
+                        
+                    </b:container>
+
+                    <b:commandButton value="Salvar"  class="btn-primary"  icon="glyphicon-floppy-disk" action="#{controlePersonagem.salvar()}" update="formEdicao :formListagem"/>
+                    <br/>
+                    <h:panelGroup id="painelItens">
+                        <p:panelGrid columns="2" columnClasses="ui-grid-col-2, ui-grid-col-20"
+                                     layout="grid" styleClass="ui-panelgrid-blank" rendered="#{controlePersonagem.editandoItem}">
+
+                            <f:facet name="header">
+                                <p:outputLabel value="Edição de itens do personagem"/>
+                            </f:facet>
+                            <p:outputLabel value="Item" for="selectItem"/>
+                            <p:selectOneMenu id="selectItem" value="#{controlePersonagem.item}">
+                                <f:converter converterId="converterItem"/>
+                                <f:selectItem itemLabel="Selecione um registro" noSelectionOption="true"/>
+                                <f:selectItems value="#{controlePersonagem.daoItem.listaObjetos}" var="i" itemLabel="#{i.descricao}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value=""/>
+                            <p:commandButton value="Salvar Item" icon="ui-icon-disk" action="#{controlePersonagem.salvarItem()}" update="formEdicao" id="btnSalvarItem"/>
+                        </p:panelGrid>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="listagemItens" rendered="#{!controlePersonagem.editandoItem}">
+                        <h:panelGroup>
+                            <p:commandButton value="Novo item" icon="ui-icon-plus" action="#{controlePersonagem.novoItem()}" update="painelItens listagemItens" id="btnNovoItem"/>
+                            <p:dataTable value="#{controlePersonagem.obj.itens}" var="item" reflow="true">
+                                <f:facet name="header">
+                                    <p:outputLabel value="Itens do Personagem"/>
+                                </f:facet>
+                                <p:column headerText="Nome">
+                                    <p:outputLabel value="#{item.descricao}"/>
+                                </p:column>
+                                <p:column headerText="Peso">
+                                    <p:outputLabel value="#{item.peso}"/>
+                                </p:column>
+                                <p:column headerText="Ações">
+                                    <div align="center">
+                                        <p:commandButton icon="ui-icon-trash" action="#{controlePersonagem.removeItem(item)}" process="@this" update="@form"/>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:form>
+        </b:row>
+    </b:well>
+    
+</html>
+

@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:b="http://bootsfaces.net/ui">
+    <ui:composition template="/templates/template.xhtml">
+        <ui:define name="titulo">Manutenção de Personagens</ui:define>
+        <ui:define name="conteudo">
+            <h:form id="formListagem">
+                <h:panelGroup rendered="#{!controlePersonagem.editando}">
+                    <p:messages/>
+                    <b:commandButton style="margin-bottom: 10px" value="Novo"  class="btn-primary" icon-align="left" tooltip-position="left"  icon="glyphicon-plus"  look="info" action="#{controlePersonagem.novo()}" update="formEdicao formListagem"/>
+                    <p:dataTable value="#{controlePersonagem.dao.listaTodos}" var="obj" reflow="true"  id="listagem" >
+                        <f:facet name="header">
+                            <p:panelGrid columns="7" styleClass="ui-panelgrid-blank"
+                                         layout="grid">
+
+                                <b:selectOneMenu value="#{controlePersonagem.dao.ordem}" label="Ordem">
+                                    <f:selectItem itemLabel="ID" itemValue="id"/>
+                                    <f:selectItem itemLabel="Descrição" itemValue="descricao"/>
+                                    <f:selectItem itemLabel="Bônus" itemValue="bonus"/>
+                                    <p:ajax update="listagem"/>
+                                </b:selectOneMenu>
+
+                                <b:inputText  value="#{controlePersonagem.dao.filtro}" size="20" label="Filtro" />
+
+                                <b:commandButton class="btn btn-primary" style="margin-top: 2px;" value="Filtrar" update="listagem" icon="ui-icon-search" process="@form"/>
+
+                                <b:inputText type="number" label="Maximo de objetos"  value="#{controlePersonagem.dao.maximoObjetos}" size="5"/>
+                            </p:panelGrid>
+                        </f:facet>
+                        <f:facet name="footer">
+                            <p:outputLabel value="#{controlePersonagem.dao.mensagemNavegacao} &nbsp; &nbsp;"/>
+                            <p:commandButton action="#{controlePersonagem.dao.primeiro()}" icon="ui-icon-seek-first" title="Primeira Página"
+                                             update="listagem"/>
+                            <p:commandButton action="#{controlePersonagem.dao.anterior()}" icon="ui-icon-seek-preview" title="Anterior"
+                                             update="listagem"/>
+                            <p:commandButton action="#{controlePersonagem.dao.proximo()}" icon="ui-icon-seek-next" title="Próximo"
+                                             update="listagem"/>
+                            <p:commandButton action="#{controlePersonagem.dao.ultimo()}" icon="ui-icon-seek-last" title="Último"
+                                             update="listagem"/>
+                        </f:facet>
+                        <p:column headerText="ID">
+                            <p:outputLabel value="#{obj.id}"/>
+                        </p:column>
+                        <p:column headerText="Nome">
+                            <p:outputLabel value="#{obj.nome}"/>
+                        </p:column>
+                        <p:column headerText="Classe">
+                            <p:outputLabel value="#{obj.classe.descricao}"/>
+                        </p:column>
+                        <p:column headerText="Outfit">
+                            <p:outputLabel value="#{obj.outfit.armadura}"/>
+                        </p:column>
+
+                        <p:column headerText="Ações">
+                            <div align="center">
+                                <p:commandButton icon="ui-icon-pencil"
+                                                 actionListener="#{controlePersonagem.alterar(obj.id)}"
+                                                 process="@form"
+                                                 update=":formEdicao formListagem"/>
+                                <p:commandButton icon="ui-icon-trash"
+                                                 actionListener="#{controlePersonagem.remover(obj.id)}"
+                                                 process="@form" update=":formListagem"/>
+                            </div>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+            <ui:include src="/privado/personagem/formulario.xhtml"/>
+        </ui:define>
+    </ui:composition>
+</html>
+
